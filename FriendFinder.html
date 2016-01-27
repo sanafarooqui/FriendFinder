@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8' />
+  <title>WallE</title>
+  <style type="text/css">
+    
+    .st0{fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st1{fill:#A9FF96;stroke:#A9FF96;stroke-miterlimit:10;}
+	.st2{fill:#B1F1FF;stroke:#B1F1FF;stroke-miterlimit:10;}
+	.st3{fill:#AAADAD;stroke:#848484;stroke-width:2;stroke-miterlimit:10;}
+    .st4{fill:#FDFFE3;stroke:#FFFFFF;stroke-width:0.25;stroke-miterlimit:10;}
+	.st5{stroke:#848484;stroke-width:2;stroke-miterlimit:10;}
+	.st6{fill:#F5FF76;stroke:#F5FF76;stroke-miterlimit:10;}
+	.st7{fill:#131600;stroke:#000000;stroke-miterlimit:10;}
+	.st8{fill:#BA8F00;stroke:#000000;stroke-miterlimit:10;}
+	.st9{fill:#0D1200;stroke:#000000;stroke-miterlimit:10;}
+	.st10{fill:#FFDDDA;stroke:#FF96F8;stroke-width:2;stroke-miterlimit:10;}
+	.st11{fill:#120800;stroke:#000000;stroke-miterlimit:10;}
+	.st12{fill:#120A00;stroke:#000000;stroke-miterlimit:10;}
+    .st13{fill:#AD9F00;stroke:#2D5500;stroke-width:2;stroke-miterlimit:10;}
+    .st14{fill:#AF7AFF;}
+	.st15{fill:#FFD188;}
+	.st16{fill:none;stroke:#15009A;stroke-miterlimit:10;}
+	.st17{fill:#FF695B;}
+	.st18{fill:#565CFF;}
+    .st19{fill:#E6E6E6;stroke:#000000;stroke-miterlimit:10;}
+     .st20{stroke:#000000;stroke-miterlimit:10;}
+    .st21{fill:#FFDDDA;stroke:#000000;stroke-width:1;stroke-miterlimit:10;}
+    
+    #group1{
+           animation-name: kite;
+           animation-timing-function: linear;
+           animation-iteration-count: infinite;
+           transform-origin:30% 100%;
+           animation-duration: 3s;
+          animation-direction: alternate;
+        
+        }
+     @keyframes kite {
+             0% {
+           transform: rotateZ(30deg) skewX(10deg);
+          } 
+          50% {
+           transform: scale(1);
+          } 
+         
+          100% {
+           transform: rotateZ(20deg) skewX(40deg);
+          } 
+        }
+     #group2{
+	     
+           animation-name: kite2;
+           animation-timing-function: linear;
+           animation-iteration-count: infinite;
+           transform-origin:100% 100%;
+           animation-duration: 3s;
+          animation-direction: alternate;
+        }
+     @keyframes kite2 {
+             0% {
+           transform: rotateZ(45deg);
+          } 
+           50% {
+           transform: scale(0.8);
+          } 
+          100% {
+           transform: rotateZ(30deg) skewX(30deg) scale(0.7);
+          }
+        }
+      
+      #ball {
+	      fill: #FFBF00;
+          stroke-width:0px;
+          animation-name: spin;
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+          transform-origin: 233.6 275.3;
+          animation-duration: 3s;
+          animation-direction: alternate;
+        }
+        @keyframes spin {
+          0% {
+            transform: translate(233.6px,275.3px) scale(0.5)
+          }
+
+          25% {
+          transform: translate(300px,130px) scale(1.5)
+          }
+          50% {
+           transform: translate(693.4px,294.1px) scale(0.5)
+          }
+             75% {
+           transform: translate(389px,237px) scale(1.5)
+          } 
+             100% {
+           transform: translate(233.6px,275.3px) scale(0.5)
+          } 
+        }
+</style>
+    
+  <script>
+      /* Create the inital scene - selects and first scene */
+      function init(){
+          makeInitialScene();
+          makeWallE();
+      }
+      
+      /* Remove SVG elements from the screen */
+      function cleanScreen(){
+        var svgEle = document.getElementsByTagName("svg")[0];
+        
+          console.log("svg before cleaning");
+          console.dir(svgEle);
+        while(svgEle.hasChildNodes()){
+            svgEle.removeChild(svgEle.lastChild);
+        }
+      }
+      
+    /* Create the first select for friend options */
+    function createSelect(){
+        var myDiv = document.getElementById("selectDiv");
+      
+        var friendSelect = document.createElement("select");
+        friendSelect.setAttribute("id","friendSelect");
+        var option0= document.createElement("option");
+        option0.value = "default";
+        option0.text = "Select a friend";
+        friendSelect.appendChild(option0);
+        
+        var option1= document.createElement("option");
+        option1.value = "eva";
+        option1.text = "Eva";
+        friendSelect.appendChild(option1);
+        
+        var option2 = document.createElement("option");
+        option2.value = "groot";
+        option2.text = "Groot";
+        friendSelect.appendChild(option2);
+        
+       friendSelect.addEventListener("change",function(){
+           
+            cleanScreen();
+            init();
+           //check values from first select to make the friends
+            if(friendSelect.value === "eva"){
+                makeEva();
+            
+            }else if(friendSelect.value === "groot"){
+              makeGroot();
+            }
+            if(!document.getElementById("doStuffSelect")){
+                doStuff();
+            }else{
+                document.getElementById("doStuffSelect").value="default";
+              }
+          },false);
+    
+         myDiv.appendChild(friendSelect);
+    }
+      
+     /* Create the second select */
+    function doStuff(){
+        var myDiv = document.getElementById("selectDiv");
+     
+        var doStuffSelect = document.createElement("select");
+        doStuffSelect.setAttribute("id","doStuffSelect");
+        var option0= document.createElement("option");
+        option0.value = "default";
+        option0.text = "Make Em";
+        doStuffSelect.appendChild(option0);
+        var option1= document.createElement("option");
+        option1.value = "sunset";
+        option1.text = "Watch Sunset";
+        doStuffSelect.appendChild(option1);
+        var option2 = document.createElement("option");
+        option2.value = "play";
+        option2.text = "Play";
+        doStuffSelect.appendChild(option2);
+    
+        doStuffSelect.addEventListener("change",function(){
+            var friend = document.getElementById("friendSelect").value;
+            cleanScreen();
+            init();
+            
+             if(friend === "eva"){
+                makeEva();
+             }else if(friend == "groot"){
+                makeGroot();
+             }
+            
+            if(doStuffSelect.value === "sunset"){  
+                watchSunset();
+            }else if(doStuffSelect.value === "play"){
+               if(friend === "eva"){
+                    playEva();
+               } else  if(friend === "groot"){
+                    playGroot();
+               } 
+            }
+          },false);
+    
+         myDiv.appendChild(doStuffSelect);
+    }
+  
+    
+  </script>
+</head>
+<body onload="init();createSelect();">
+    <div id="selectDiv"></div>
+    
+<svg height="1000px" width="100%">
+    <script>
+        var svgns="http://www.w3.org/2000/svg";
+        
+        function makeInitialScene(){
+            
+            var g = document.getElementsByTagName("svg")[0];
+            var p1 = document.createElementNS(svgns,"path");
+            p1.setAttribute("id","ground");
+            p1.setAttribute("class","st1");
+            p1.setAttribute("d","M959.2,560H0.8V458.2c85.7-15.7,172.1-31.5,259.2-29.5c59.1,1.3,117.6,10.9,176.5,16c121.9,10.7,245.5,2.6,365-23.9c52.3-11.6,108.8-26.4,157.7-4.6");
+            g.appendChild(p1);
+    
+            var p2 = document.createElementNS(svgns,"path");
+            p2.setAttribute("class","st0");
+            p2.setAttribute("id","sunsetPath");
+            p2.setAttribute("d","M742.9,65.6C676.5,48.6,621.4,50.2,581,56C311.1,95.1,185,403.2,173.9,431.6");
+            g.appendChild(p2);
+            
+             var p3 = document.createElementNS(svgns,"path");
+            p3.setAttribute("class","st2");
+            p3.setAttribute("id","sky");
+            p3.setAttribute("d","M959.2,0H0.8v458.2v0c85.7-15.7,172.1-31.5,259.2-29.5c59.1,1.3,117.6,10.9,176.5,16c121.9,10.7,245.5,2.6,365-23.9c52.3-11.6,108.8-26.4,157.7-4.6");
+            g.appendChild(p3);
+            
+            var c = document.createElementNS(svgns,"circle");
+            c.setAttribute("class","st6");
+            c.setAttribute("id","thesun");
+            c.setAttribute("r","50");
+            c.setAttribute("cx","-40px");
+            c.setAttribute("cy","-40px");
+            g.appendChild(c);
+            
+            var c1 = document.createElementNS(svgns,"circle");
+            c1.setAttribute("class","st19");
+            c1.setAttribute("id","moon");
+            c1.setAttribute("r","38");
+            c1.setAttribute("cx","-20px");
+            c1.setAttribute("cy","-20px");
+            g.appendChild(c1);
+         
+        }
+        
+        function makeWallE(){
+            var g = document.createElementNS(svgns,"g");
+            g.setAttribute("id","walle");
+            
+             var p1 = document.createElementNS(svgns,"path");
+            p1.setAttribute("class","st3");
+            p1.setAttribute("d","M180,411.5H85V319c-3.7-32.1,19.8-58.7,45-59.9c26.61.2,53.6,25.9,49.9,59.9C180,349.8,180,380.7,180,411.5z");
+            g.appendChild(p1);
+
+            var p3 = document.createElementNS(svgns,"polygon");
+            p3.setAttribute("class","st3");
+            p3.setAttribute("points","207.9,372.3 195.4,376 179.4,320.1 191.8,316.4");
+            g.appendChild(p3);
+        
+           var p4 = document.createElementNS(svgns,"path");
+            p4.setAttribute("class","st3");
+            p4.setAttribute("d","M73.7,387.5h8.2c1.7,0,3.2-1.4,3.2-3.2v-62.1c0-1.7-1.4-3.2-3.2-3.2h-8.2c-1.7,0-3.2,1.43.2,3.2v62.1C70.5,386.1,71.9,387.5,73.7,387.5z");
+            g.appendChild(p4);
+
+            var p5 = document.createElementNS(svgns,"path");
+            p5.setAttribute("class","st3");
+            p5.setAttribute("d","M199.7,374.7c-3.5,14.2,0,21.5,0,21.5l18-3.6l6.5-7.1l-13.1-9.5l-3.2-3.7");
+            g.appendChild(p5);
+            
+            var l3 = document.createElementNS(svgns,"polyline");    
+            l3.setAttribute("points","81.9,387.5 77.7,402.1 63.3,396.2 73.7,387.5");
+            l3.setAttribute("class","st3");
+            g.appendChild(l3);
+            
+            var e1 = document.createElementNS(svgns,"ellipse");    
+            e1.setAttribute("class","st3");
+            e1.setAttribute("cx","108.6");
+            e1.setAttribute("cy","426.5");
+            e1.setAttribute("rx","13.6");
+            e1.setAttribute("ry","14.9");
+            g.appendChild(e1);
+
+            var e2 = document.createElementNS(svgns,"ellipse");    
+            e2.setAttribute("class","st3");
+            e2.setAttribute("cx","160.3");
+            e2.setAttribute("cy","426.5");
+            e2.setAttribute("rx","13.6");
+            e2.setAttribute("ry","14.9");
+            g.appendChild(e2);
+            
+            var e3 = document.createElementNS(svgns,"ellipse");    
+            e3.setAttribute("class","st20");
+            e3.setAttribute("cx","113.6");
+            e3.setAttribute("cy","286.4");
+            e3.setAttribute("rx","5");
+            e3.setAttribute("ry","7.7");
+            g.appendChild(e3);
+            
+            var e4 = document.createElementNS(svgns,"ellipse");    
+            e4.setAttribute("class","st20");
+            e4.setAttribute("cx","145.6");
+            e4.setAttribute("cy","286.4");
+            e4.setAttribute("rx","5.4");
+            e4.setAttribute("ry","7.7");
+            g.appendChild(e4);
+            document.getElementsByTagName("svg")[0].appendChild(g);
+              
+            var l4 = document.createElementNS(svgns,"line");    
+            l4.setAttribute("class","st5");
+            l4.setAttribute("x1","85");
+            l4.setAttribute("y1","319");
+            l4.setAttribute("x2","179.4");
+            l4.setAttribute("y2","320.1");
+            g.appendChild(l4);
+        }
+   
+        /* Creates Groot */
+        function makeGroot() {
+            var g = document.createElementNS(svgns,"g");
+            g.setAttribute("id","groot");
+
+            var p1 = document.createElementNS(svgns,"path");
+            p1.setAttribute("class","st13");
+            p1.setAttribute("d","M633.3,406.1c0-0.1,0-0.1,0-0.2l-0.5,12.7C633.3,414.5,633.7,410.2,633.3,406.1z");
+            g.appendChild(p1);
+
+             var p2 = document.createElementNS(svgns,"path");    
+            p2.setAttribute("class","st13");
+            p2.setAttribute("d","M669,443.5c-3.1-11,2.7-12.6,3.7-23.5s-5.4-20.3-3.5-31.3c1.8-10.2,5.7-18.6,1.7-28.9c-3.1-8.2-8.9-15.5-8.1-25c0.8-9.3,5.2-12.6,7.5-21.4l0,0c7.1,6.2,16.2,8.8,24.9,8s17.2-4.8,24.4-10.8c5.2-4.2,10-9.5,15.9-12.3s13.6-2.3,17.5,3.7c3.5-5.1,8-9.6,13.3-11.6c1.2-0.4,2.8-1.2,2.6-2.7l0.1,2.6c-3.9,3.5-7.9,7.7-10.9,12.3c-9.9-0.7-20.3-1.2-29.1,4c-6.4,3.8-11.4,10.7-17.6,15.3c-13.4,10.1-32.5,8.2-44.2-4.4l0.7,1.5c1.9-2.5,2.5-6.4,1.5-9.5c-0.3-1.1-0.8-2-1.3-3c-1.7-3.4-3.9-6.6-7-7.8l0.1-0.2c-1.7-1.3-3.3-2.8-4.6-4.6l-0.1-0.4c1.2,0.3,2.2-0.4,3.2-1.1c3.5-2.4,6.7-5.2,9.9-8.1c1.6-1.5,3.1-3.1,4.7-4.7c1.6-1.7,2-2.8,2.7-5.1c0.2-0.7,0.5-1.5,0.2-2.3l-0.6,3.6l1-39.3l-0.1-0.1c0.6,0.4,1.5,0.2,2.1-0.3s1-1.2,1.5-1.9c0.9-1.4,2-2.7,3.3-3.7c1.4-1,2.7-1.9,3.8-3.2c0.8-1.1,1.4-2.6,1.9-4c1.6-4.6,2.5-9.6,2.7-14.6c0-1.5,0-3,0.3-4.4c0.2-1.6,0.9-3,1.6-4.4c1.4-3.1,3.3-6.3,6.1-7.6c2.1-1,4.5-0.9,6.7-0.7l-6.8-4.8c-3.8,2.1-8.7-0.1-12.1,2.8c-1.7,1.5-2.6,3.9-2.8,6.3c-0.1,2,0.1,3.9-0.2,5.8c-0.4,2.9-1.9,5-3.1,7.4c-1.3,2.5-2.3,5.1-4,7c-1.2,1.3-2.6,2.3-3.9,3.5c-4,4.1-5.3,10.8-5.5,17.2l-5.4-0.4c-0.3-4.5-0.6-9.6,1.6-13.4c0.8-1.4,2-2.5,2.9-3.9c2.1-3,3-7,3.2-10.9c0.2-3.8-0.4-7.8-0.9-11.6c-0.2-1.6-0.5-3.1-0.2-4.6s1.2-3.1,2.4-3.5l-4.7-6c0.1,2-1.8,3.3-3.4,3.9c-1.7,0.6-3.6,1.2-4.4,3c-0.4,0.9-0.3,2.1-0.3,3.1c0.3,12.9-1.2,26.1-4.5,38.5l-6.7,5.1l-2.3-0.2c1.4-3.9,4-7.2,6.2-10.5c1.8-2.7,3.2-5.3,4.7-8.1c0.5-0.9,0.9-1.8,1.1-2.8c0.2-1.5-0.2-3.2-1-4.5c-0.7-1.3-1.7-2.4-2.8-3.4c-0.6-0.5-1.2-1.1-1.5-1.9c-0.3-0.7-0.3-1.6-0.3-2.4c0.1-4.6,0.3-9.4,0.5-14l-18.6-6c-1.1,2-0.4,4.6,0.5,6.7c2.4,5.7,5.7,11,9.7,15.4c0.4,0.5,0.8,0.9,0.9,1.5c0.1,0.8-0.3,1.5-0.8,2.1c-4.6,6.8-4.3,16.3-3.8,25l-4.1,0.5c0-2.3-0.4-4.4-1.2-6.4c-0.4-1-0.9-2-1-3c-0.2-1,0.2-2.2,0.5-3.2c0.9-3,1.4-6.2,1.3-9.4c-0.1-3.3-1.2-6.4-3.1-8.5c-1.5-1.8-3.6-2.7-5.7-3.6c-2-1-4.2-1.8-5.8-3.5s-2.8-4.4-2.3-6.9l-3.5,5.4c-0.2,3.5-0.4,7.4,1.5,10.1c1.6,2.4,4.7,3.3,6.4,5.7c1.9,2.4,2.3,6.1,2.2,9.5c-0.1,3.3-0.5,6.8,0.2,10.1c0.5,2.4,1.8,5.2,0.8,7.5l0.5-0.6V280c0.7,0.5,1.2,1.3,1.5,2.4c1,3.7,2.1,6.7,5.3,7.9c2.5,1,3.1,3.9,2.2,6.3v0.3c0.3-0.2,0.5-0.3,0.8-0.5l0.1-0.2l-0.9,0.6c-0.1,0.1-0.2,0.1-0.2,0.2c-0.5,0.9-1.2,1.5-1.9,1.7c-5.5,6.2-6.6,17.9-6,27.8c0.7,11.4,3.1,22.7,1.9,34c-0.9,8.7-3.9,17.1-2.8,25.7c0.9,6.8,4.4,12.9,5.2,19.8l-0.4,12.7c-1,8.2-1.3,29.5-0.8,22.4");
+           g.appendChild(p2);
+
+             var e1 = document.createElementNS(svgns,"ellipse");    
+            e1.setAttribute("class","st12");
+            e1.setAttribute("cx","639.4");
+            e1.setAttribute("cy","255.6");
+            e1.setAttribute("rx","5");
+            e1.setAttribute("ry","9.6");
+            g.appendChild(e1);
+            
+            var e2 = document.createElementNS(svgns,"ellipse");    
+            e2.setAttribute("class","st12");
+            e2.setAttribute("cx","665.9");
+            e2.setAttribute("cy","255.9");
+            e2.setAttribute("rx","4.8");
+            e2.setAttribute("ry","9.9");
+            g.appendChild(e2);
+          
+                   
+            var p21 = document.createElementNS(svgns,"path");    
+            p21.setAttribute("class","st13");
+            p21.setAttribute("d","M628.9,310c-7.4-3.6-15.9,0.8-22,7s-10.9,14.1-17.6,19.2c-1.5,1.2-3.2,2.2-5,2.3c-3.3,0.2-6-2.3-8.7-4.3c-4.7-3.6-10.2-5.7-15.7-6.4c-4.9-0.6-6.9,1.7-10.8,3.8c-3.4,1.8-5.2-0.5-8.3-1.5c-2.6-0.7-5.2-0.5-7.8,0.3c5.2,0.5,10.7,2.4,15.5,4.9l-0.4-0.5c1.2-0.1,2.1-0.1,3.3-0.2c0.1-2.9,2.6-5.1,5-5.3s4.9,1.2,6.9,2.9c5.6,4.6,9.9,12,16.4,14.6c5.4,2.1,11.6,0.5,16.6-2.9c5-3.3,9-8.4,13-13.3c2-2.6,4.1-5.2,5.7-8.1c1-1.6,1.7-3.4,3-4.7c3.2-3.3,9-2.5,10.9-2.2");
+            g.appendChild(p21);
+
+            var p22 = document.createElementNS(svgns,"path");    
+            p22.setAttribute("class","st13");
+            p22.setAttribute("d","M641.5,274.1c-1.1,3.4,8.5,12.3,16.4,6.4c2.3-1.7,4.4-3.8,6.1-6.4");
+            g.appendChild(p22);
+
+            document.getElementsByTagName("svg")[0].appendChild(g);
+    }
+            
+        /* Creates Eva */
+        function makeEva() {
+        
+            var g = document.createElementNS(svgns,"g");
+            g.setAttribute("id","eva");
+
+            var p1 = document.createElementNS(svgns,"path");
+            p1.setAttribute("class","st10");
+            p1.setAttribute("d","M641.7,427.4h-69.8c-6.6,0-12-5.4-12-12v-97.7c0-6.6,5.4-12,12-12h69.8c6.6,0,12,5.4,12,12v97.7C653.7,422,648.3,427.4,641.7,427.4z");
+            g.appendChild(p1);
+
+             var p2 = document.createElementNS(svgns,"path");    
+            p2.setAttribute("class","st10");
+            p2.setAttribute("d","M660.4,379.6L660.4,379.6c-4.6,0-8.4-3.8-8.4-8.4v-51.3c0-4.6,3.8-8.4,8.4-8.4l0,0c4.6,0,8.4,3.8,8.4,8.4v51.3C668.8,375.8,665,379.6,660.4,379.6z");
+           g.appendChild(p2);
+
+            var p3 = document.createElementNS(svgns,"path");    
+            p3.setAttribute("class","st10");
+            p3.setAttribute("d","M550.9,379.6h3.2c3.4,0,6.2-2.8,6.2-6.2v-55.8c0-3.4-2.8-6.2-6.2-6.2h-3.2c-3.4,0-6.2,2.8-6.2,6.2v55.8C544.8,376.8,547.5,379.6,550.9,379.6z");
+            g.appendChild(p3);
+
+            var p4 = document.createElementNS(svgns,"path");    
+            p4.setAttribute("class","st10");
+            p4.setAttribute("d","M666.3,377.1c0,8.9,5.1,16.2,11.3,16.2");
+            g.appendChild(p4);
+
+            var p5 = document.createElementNS(svgns,"path");    
+            p5.setAttribute("class","st10");
+            p5.setAttribute("d","M677.6,393.3c0-8.9-5.1-16.2-11.3-16.2");
+            g.appendChild(p5);
+
+            var e1 = document.createElementNS(svgns,"ellipse");    
+            e1.setAttribute("class","st10");
+            e1.setAttribute("cx","549.4");
+            e1.setAttribute("cy","388.9");
+            e1.setAttribute("rx","3.1");
+            e1.setAttribute("ry","9.3");
+            g.appendChild(e1);
+
+            var e2 = document.createElementNS(svgns,"ellipse");    
+            e2.setAttribute("class","st10");
+            e2.setAttribute("cx","609.9");
+            e2.setAttribute("cy","438.7");
+            e2.setAttribute("rx","60.4");
+            e2.setAttribute("ry","11.5");
+            g.appendChild(e2);
+
+            var p6 = document.createElementNS(svgns,"path");    
+            p6.setAttribute("class","st10");
+            p6.setAttribute("d","M570.1,300.8c0-24,15.6-44.6,34.9-44.6s34.9,20.6,34.9,44.6H570.1z");
+            g.appendChild(p6);
+
+            var e3 = document.createElementNS(svgns,"ellipse");    
+            e3.setAttribute("class","st11");
+            e3.setAttribute("cx","591.8");
+            e3.setAttribute("cy","276.4");
+            e3.setAttribute("rx","4.9");
+            e3.setAttribute("ry","6.2");
+            g.appendChild(e3);
+
+            var e4 = document.createElementNS(svgns,"ellipse");    
+            e4.setAttribute("class","st12");
+            e4.setAttribute("cx","618.3");
+            e4.setAttribute("cy","276.4");
+            e4.setAttribute("rx","4.9");
+            e4.setAttribute("ry","6.2");
+            g.appendChild(e4);
+
+            var p7 = document.createElementNS(svgns,"path");    
+            p7.setAttribute("class","st21");
+            p7.setAttribute("d","M623.4,264.5c-0.3,3.1-2.8,5.6-5.4,5.4c1.3,0.3,5.3,0.3,6.6-0.1c1.3-0.4,2.4-1.7,2.1-3");
+            g.appendChild(p7);
+
+            var r = document.createElementNS(svgns,"rect");    
+            r.setAttribute("class","st10");
+            r.setAttribute("x","600.1");
+            r.setAttribute("y","300.8");
+            r.setAttribute("width","13.4");
+            r.setAttribute("height","4.8");
+            g.appendChild(r);
+
+            var p8 = document.createElementNS(svgns,"path");    
+            p8.setAttribute("class","st21");
+            p8.setAttribute("d","M591.1,269.2c-2.6,0.8-5.5-2.2-4.6-4.8");
+            g.appendChild(p8);
+
+            var p9 = document.createElementNS(svgns,"path");    
+            p9.setAttribute("class","st21");
+            p9.setAttribute("d","M589.6,270.2c-3.1,0.5-6.4-1.5-7.4-4.5");
+            g.appendChild(p9);
+
+            document.getElementsByTagName("svg")[0].appendChild(g);
+
+    }
+    
+        /* Scene for the sunset */
+        function watchSunset(){
+            var moveWalle = document.querySelector('#walle').animate([
+                {transform: "translate(0,0)"},
+                {transform: "translate(350px,10px)"}
+                ],{
+                duration: 2500,
+                iteration: 1
+            });
+            
+            if(document.querySelector('#groot')){
+              var moveGroot = document.querySelector('#groot').animate([
+                {transform: "translate(0,0)"},
+                {transform: "translate(-70px,8px)"}],{
+                duration: 2500,
+                iteration: 1
+                });
+            }
+            var ani = document.createElementNS(svgns,"animateMotion");
+            ani.setAttribute("begin", "5s");
+            ani.setAttribute("dur", "5s");
+            ani.setAttribute("repeatCount", "1");
+
+            var mpath = document.createElementNS(svgns,"mpath");
+            mpath.setAttributeNS ("http://www.w3.org/1999/xlink", "href", "#sunsetPath");
+            ani.appendChild(mpath);
+            document.querySelector('#thesun').appendChild(ani); 
+           
+              var redSquare = document.querySelector( "#thesun" ).animate([
+            { opacity: "1.0", transform: "scale( 1 )" },
+            { opacity: "0.5", transform: "scale( 0.7 )" },
+            { opacity: "0.3", transform: "scale( 0.5 )" }
+        ], {
+            duration: 5000,
+            iterations: 1,
+            delay: 4000,
+            easing: "ease-out"
+        });
+            
+            var ani1 = document.createElementNS(svgns,"animate");
+            ani1.setAttribute("begin", "6s");
+            ani1.setAttribute("dur", "5s");
+            ani1.setAttribute("attributeName", "fill");
+            ani1.setAttribute("values", "#B1F1FF;#F7D358;#FF8000;#FF4000;#8A0808;#61210B;#2E2E2E");
+            ani1.setAttribute("fill", "freeze");
+            document.querySelector('#sky').appendChild(ani1); 
+            
+            var ani1 = document.createElementNS(svgns,"animate");
+            ani1.setAttribute("begin", "8s");
+            ani1.setAttribute("dur", "3s");
+            ani1.setAttribute("attributeName", "fill");
+            ani1.setAttribute("values", "#A9FF96;#397539");
+            ani1.setAttribute("fill", "freeze");
+            document.querySelector('#ground').appendChild(ani1); 
+            
+            
+            var moon = document.querySelector('#moon').animate([
+                {transform: "translate(469.3px,0)"},
+                {transform: "translate(443.2px,92.1px)"}
+            ],{ 
+                delay:6000,
+                duration: 6000,
+                iteration: 1
+            });
+       
+            /**** Trying to create stars using patterns *****/
+            
+            //enclosing star within def then in pattern
+            
+        /*   var stardef = document.createElementNS(svgns,"defs");
+             var star = document.createElementNS(svgns,"polygon");
+             star.setAttribute("class","st4");
+             star.setAttribute("id","star");
+             star.setAttribute("points","250,0 64,64 0,250 -64,64 -250,0 -64,-64 0,-250 64,-64");
+          // stardef.appendChild(star);
+           
+          
+              var pattern = document.createElementNS(svgns,"pattern");
+              pattern.setAttribute("id","tile"); 
+              pattern.setAttribute("width","500"); 
+              pattern.setAttribute("height","500"); 
+              pattern.setAttribute("x","100"); 
+              pattern.setAttribute("y","100"); 
+              pattern.setAttribute("patternUnits","userSpaceOnUse"); 
+              pattern.appendChild(star);
+              stardef.appendChild(pattern); 
+            
+            
+        /*    var starGroup = document.createElementNS(svgns,"g");
+            starGroup.setAttribute("id","starGroup");
+            var use1 = document.createElementNS(svgns,"use");
+            use1.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#stardef");
+             use1.setAttribute("transform", "rotate(0)");
+            starGroup.appendChild(use1);
+            var use2 = document.createElementNS(svgns,"use");
+            use2.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#stardef");
+             use2.setAttribute("transform", "rotate(120) scale(0.5)");
+            starGroup.appendChild(use2);
+              var use3 = document.createElementNS(svgns,"use");
+            use3.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#stardef");
+             use3.setAttribute("transform", "rotate(120) scale(0.2)");
+            starGroup.appendChild(use3);*/
+            
+           /* 
+            var rect = document.createElementNS(svgns,"rect");
+            rect.setAttribute("id","rect"); 
+            rect.setAttribute("width","100%"); 
+            rect.setAttribute("height","100%"); 
+            rect.setAttribute("x","100"); 
+            rect.setAttribute("y","100"); 
+            rect.setAttribute("style","fill:url(#tile)"); //trying to fill pattern directly into a rect..
+            
+           document.querySelector( "#sky" ).appendChild(rect);  */
+         
+        }
+        
+        /* Evas play scene */
+        function playEva(){
+            var r1 = document.createElementNS(svgns,"rect");
+            r1.setAttribute("class","st7");
+            r1.setAttribute("x","217");
+            r1.setAttribute("y","319");
+            r1.setAttribute("width","10.1");
+            r1.setAttribute("height","60.6");
+            r1.setAttribute("transform","matrix(0.9731 0.2306 -0.2306 0.9731 86.5147 -41.7796)");
+            document.getElementById("walle").appendChild(r1);
+
+            var r2 = document.createElementNS(svgns,"rect");
+            r2.setAttribute("class","st9");
+            r2.setAttribute("x","678");
+            r2.setAttribute("y","322.8");
+            r2.setAttribute("width","10.1");
+            r2.setAttribute("height","60.6");
+            r2.setAttribute("transform","matrix(0.9795 0.2013 -0.2013 0.9795 85.0635 -130.1667)");
+           document.getElementById("eva").appendChild(r2);
+
+            var e4 = document.createElementNS(svgns,"ellipse");    
+            e4.setAttribute("class","st8");
+            e4.setAttribute("cx","233.6");
+            e4.setAttribute("cy","294.6");
+            e4.setAttribute("rx","22.4");
+            e4.setAttribute("ry","24.4");
+            document.getElementById("walle").appendChild(e4);
+
+            var e1 = document.createElementNS(svgns,"ellipse");    
+            e1.setAttribute("class","st8");
+            e1.setAttribute("cx","695.6");
+            e1.setAttribute("cy","300.8");
+            e1.setAttribute("rx","22.4");
+            e1.setAttribute("ry","23.4");
+            document.getElementById("eva").appendChild(e1);
+
+            var c = document.createElementNS(svgns,"circle");    
+            c.setAttribute("class","st0");
+            c.setAttribute("cx","0");
+            c.setAttribute("cy","0");
+            c.setAttribute("r","20");
+            c.setAttribute("id","ball");
+            document.getElementById("eva").appendChild(c);
+
+
+             var moveWalle = document.querySelector('#walle').animate([
+                {transform: "translate(0,0)"},
+                {transform: "translate(20px,-5px)"},
+                {transform: "translate(-20px,0px)"},
+                {transform: "translate(20px,-10px)"}],{
+                duration: 5000,
+                iterations: Infinity,
+                direction:"alternate"
+            });
+
+
+             var moveEva = document.querySelector('#eva').animate([
+                {transform: "translate(0,0)"},
+                {transform: "translate(-30px,10px)"},
+                {transform: "translate(20px,-5px)"}],{
+                duration: 5000,
+                iterations: Infinity,
+                direction:"alternate"
+            });
+      }
+      
+        function playGroot(){
+            var g = document.createElementNS(svgns,"g");
+            g.setAttribute("id","group2");
+
+            var p3 = document.createElementNS(svgns,"path");    
+            p3.setAttribute("class","st16");
+            p3.setAttribute("d","M448,118.1c-7.4,18.8-6.5,40.7,2.4,58.9c18.4,37.4,67.3,56.7,75.7,97.5c2,9.8,1.4,20,2.4,29.9c1,10,4,20.4,11.6,26.9");
+            g.appendChild(p3);
+
+            var r2 = document.createElementNS(svgns,"rect");
+            r2.setAttribute("class","st14");
+            r2.setAttribute("id","kite2");
+            r2.setAttribute("x","387.2");
+            r2.setAttribute("y","46.8");
+            r2.setAttribute("width","68.8");
+            r2.setAttribute("height","66.3");
+            r2.setAttribute("transform","matrix(-0.9735 -0.2288 0.2288 -0.9735 813.7527 254.2655)");
+            g.appendChild(r2);
+          
+            var p3 = document.createElementNS(svgns,"path");    
+            p3.setAttribute("class","st15");    p3.setAttribute("d","M395.7,39.8c2.9,0.4,5.7,0.8,8.5,1.2l8.5,1.3c2.8,0.4,5.7,0.9,8.5,1.4l8.5,1.5c5.7,1,11.3,2,16.9,3.1l8.5,1.6l8.4,1.7l3.7,0.7l-0.8,4c-1.1,5.4-2.2,10.8-3.3,16.2c-1.1,5.4-2.3,10.8-3.5,16.2l-3.6,16.2l-3.7,16.2l-1.1,4.9l-4.9-1.2l-16.7-4c-5.6-1.4-11.1-2.7-16.7-4.1c-5.6-1.4-11.1-2.8-16.7-4.3c-5.6-1.4-11.1-2.9-16.6-4.4l-3.9-1l1-3.6l2.2-8l2.2-8l2.3-8l2.3-8l2.4-8c0.8-2.7,1.6-5.3,2.4-7.9l2.5-7.9C394,45.1,394.8,42.4,395.7,39.8z M395.7,39.8c-0.4,2.8-0.8,5.5-1.2,8.2l-1.3,8.2c-0.4,2.7-0.9,5.5-1.4,8.2l-1.4,8.2l-1.5,8.2l-1.5,8.2l-1.6,8.1l-1.6,8.1l-2.9-4.7c5.6,1.1,11.2,2.3,16.9,3.5c5.6,1.2,11.2,2.4,16.8,3.6c5.6,1.2,11.2,2.5,16.8,3.7l16.8,3.9l-6,3.7l3.9-16.1l4-16.1c1.4-5.4,2.7-10.7,4.1-16.1c1.4-5.4,2.8-10.7,4.2-16l2.9,4.8l-8.3-2.3l-8.3-2.3c-5.5-1.5-11-3.1-16.6-4.7l-8.3-2.5c-2.7-0.8-5.5-1.6-8.2-2.5l-8.2-2.6C401.2,41.6,398.4,40.8,395.7,39.8z");
+            g.appendChild(p3);
+            document.getElementById("groot").appendChild(g);
+
+
+            var g1 = document.createElementNS(svgns,"g");
+            g1.setAttribute("id","group1");
+
+            var r2 = document.createElementNS(svgns,"rect");
+            r2.setAttribute("class","st17");
+            r2.setAttribute("id","kite1");
+            r2.setAttribute("x","226.4");
+            r2.setAttribute("y","67");
+            r2.setAttribute("width","48.9");
+            r2.setAttribute("height","48.3");
+            r2.setAttribute("transform","matrix(0.8032 0.5957 -0.5957 0.8032 103.6423 -131.4534)");
+            g1.appendChild(r2);
+
+            var p1 = document.createElementNS(svgns,"path");    
+            p1.setAttribute("class","st18");
+            p1.setAttribute("d","M255.8,125.5c-1.9-0.8-3.7-1.8-5.6-2.7c-1.8-1-3.6-2-5.4-3c-3.6-2-7-4.2-10.5-6.4c-3.4-2.2-6.8-4.5-10.1-6.9c-1.7-1.2-3.3-2.4-4.9-3.6c-1.6-1.2-3.2-2.5-4.7-3.9l-3-2.6l2.3-2.6c2.6-3.1,5.5-6,8.2-8.9c2.8-2.9,5.5-5.9,8-9.1c1.3-1.6,2.5-3.2,3.7-4.8c1.2-1.6,2.3-3.3,3.5-4.9c1.1-1.7,2.2-3.4,3.3-5.1c1.1-1.7,2.1-3.5,3.2-5.2l1.1-1.9l2.3,1.4l5.3,3.1c1.8,1,3.5,2.1,5.2,3.2c3.5,2.2,6.8,4.5,10.2,6.8c3.4,2.3,6.8,4.6,10.1,6.9c1.7,1.2,3.3,2.4,5,3.6l2.5,1.8c0.8,0.6,1.6,1.2,2.4,1.8l3.9,3l-2.9,3.7c-1.2,1.6-2.5,3.2-3.7,4.7c-1.3,1.6-2.5,3.1-3.8,4.7c-2.6,3.1-5.2,6.2-7.9,9.2c-1.3,1.5-2.7,3-4.1,4.5c-1.3,1.5-2.7,3-4.1,4.4c-1.4,1.5-2.8,2.9-4.2,4.4c-1.4,1.4-2.9,2.9-4.4,4.2l-0.3,0.3L255.8,125.5z M255.9,124.3c0.8-1.7,1.7-3.3,2.5-5c1-1.8,1.9-3.6,2.9-5.3c1-1.8,2-3.5,3.1-5.3c1-1.7,2.1-3.5,3.1-5.2c2.1-3.4,4.3-6.8,6.5-10.2c1.1-1.7,2.2-3.3,3.4-5c1.1-1.7,2.3-3.3,3.5-4.9l1,6.7c-0.8-0.6-1.7-1.2-2.5-1.8l-2.5-1.8c-1.6-1.2-3.2-2.5-4.8-3.7c-3.2-2.5-6.4-5.1-9.5-7.7c-3.2-2.6-6.4-5.1-9.4-7.8c-1.5-1.3-3.1-2.7-4.6-4.1l-4.5-4.1l3.4-0.5c-1.3,1.5-2.7,3-4,4.5c-1.3,1.5-2.6,3-3.9,4.6c-1.3,1.6-2.5,3.1-3.7,4.8c-1.2,1.6-2.4,3.2-3.5,4.9c-2.3,3.3-4.4,6.8-6.4,10.3c-2,3.5-4,7.1-6.2,10.5L219,93c1.7,1.1,3.4,2.2,5.1,3.4c1.7,1.2,3.3,2.4,4.9,3.7c3.2,2.5,6.4,5,9.5,7.7c3.1,2.6,6.2,5.3,9.2,8.2c1.5,1.4,3,2.8,4.4,4.3C253.4,121.5,254.7,122.9,255.9,124.3z");
+             g1.appendChild(p1);
+
+             var p3 = document.createElementNS(svgns,"path");    
+            p3.setAttribute("class","st16");
+            p3.setAttribute("d","M256.1,123.3c-10.7,11.5-11.8,29.3-7.9,44.5s11.8,29.1,17.3,43.8c5.5,14.7,8.4,31.6,2,45.9c-4.1,9.1-11.5,16.3-17.2,24.5c-5.7,8.2-9.8,18.8-6.2,28.1c2,5.2,6.4,9.8,6,15.3c-0.2,3-1.8,5.7-2.5,8.6c-1.6,6.2,0.4,12.9-1.1,19.1c-3.8,15.8-27.7,20.8-30,36.8");
+            g1.appendChild(p3);
+
+            document.getElementById("walle").appendChild(g1); 
+        
+            var moveWalle = document.querySelector('#walle').animate([
+                {transform: "translate(0,0)"},
+                {transform: "translate(50px,-5px)"},
+                {transform: "translate(100px,40px)"},
+                {transform: "translate(-30px,-10px)"}],{
+                    duration: 5000,
+                    iterations: Infinity,
+                    direction:"alternate"
+                });
+            
+            var moveEva = document.querySelector('#groot').animate([
+                {transform: "translate(0,0)"},
+                {transform: "translate(-30px,10px)"},
+                {transform: "translate(50px,20px)"},
+                {transform: "translate(100px,-5px)"}],{
+                    duration: 5000,
+                    iterations: Infinity,
+                    direction:"alternate"
+                });
+            
+      }
+    </script>
+        
+</svg>
+
+</body>
+</html>
